@@ -12,6 +12,7 @@ namespace MVCwithWebAPI.Models
         {
         }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<Customer> Customer { get; set; }
         //public DbSet<Contact> Contacts { get; set; }
     }  
     
