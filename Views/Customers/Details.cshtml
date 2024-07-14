@@ -1,16 +1,13 @@
-﻿@model MVCwithWebAPI.Models.Employee
+﻿@model MVCwithWebAPI.Models.Customer
 
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = "Details";
 }
 
-<center>
-  <h2>Customer Profile</h2>
-</center>
+<center><h2>Customer Profile</h2></center>
 
-    <div>
-        <h4>Detail</h4>
-
+<div>
+    <h4>Detail</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -73,6 +70,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
