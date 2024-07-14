@@ -13,31 +13,30 @@ using MVCwithWebAPI.Models;
 
 namespace MVCwithWebAPI.Controllers
 {
-    public class EmployeesController : Controller
+    public class CustomersController : Controller
     {
         readonly string apiBaseAddress = ConfigurationManager.AppSettings["apiBaseAddress"];
         public async Task<ActionResult> Index()
         {
-            IEnumerable<Employee> employees = null;
+            IEnumerable<Customer> customers = null;
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiBaseAddress);
 
-                var result = await client.GetAsync("employees/get");
+                var result = await client.GetAsync("customers/get");
 
                 if (result.IsSuccessStatusCode)
                 {
-                    employees = await result.Content.ReadAsAsync<IList<Employee>>(); 
+                    customers = await result.Content.ReadAsAsync<IList<Customer>>();
                 }
                 else
                 {
-                    employees = Enumerable.Empty<Employee>();
+                    customers = Enumerable.Empty<Customer>();
                     ModelState.AddModelError(string.Empty, "Server error try after some time.");
                 }
             }
-
-            return View(employees);
+            return View(customers);
         }
         public async Task<ActionResult> Details(string id)
         {
@@ -46,16 +45,16 @@ namespace MVCwithWebAPI.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Employee employee = null;
+            Customer customer = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiBaseAddress);
 
-                var result = await client.GetAsync($"employees/details/{id}");
+                var result = await client.GetAsync($"Customers/details/{id}");
 
                 if (result.IsSuccessStatusCode)
                 {
-                    employee = await result.Content.ReadAsAsync<Employee>();
+                    customer = await result.Content.ReadAsAsync<Customer>();
                 }
                 else
                 {
@@ -63,11 +62,11 @@ namespace MVCwithWebAPI.Controllers
                 }
             }
 
-            if (employee == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(customer);
         }
         public ActionResult Create()
         {
@@ -75,7 +74,7 @@ namespace MVCwithWebAPI.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Name,Age,DOB,Gender,Occupation,Email,PhoneNo")] Employee employee)
+        public async Task<ActionResult> Create([Bind(Include = "Name,Age,DOB,Gender,Occupation,Email,PhoneNo")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +82,7 @@ namespace MVCwithWebAPI.Controllers
                 {
                     client.BaseAddress = new Uri(apiBaseAddress);
 
-                    var response = await client.PostAsJsonAsync("employees/Create", employee);
+                    var response = await client.PostAsJsonAsync("customers/Create", customer);
                     if (response.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
@@ -94,7 +93,7 @@ namespace MVCwithWebAPI.Controllers
                     }
                 }
             }
-            return View(employee);
+            return View(customer);
         }
 
         public async Task<ActionResult> Edit(string id)
@@ -103,39 +102,39 @@ namespace MVCwithWebAPI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = null;
+            Customer customer = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiBaseAddress);
 
-                var result = await client.GetAsync($"employees/details/{id}");
+                var result = await client.GetAsync($"Customers/details/{id}");
 
                 if (result.IsSuccessStatusCode)
                 {
-                    employee = await result.Content.ReadAsAsync<Employee>();
+                    customer = await result.Content.ReadAsAsync<Customer>();
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Server error try after some time.");
                 }
             }
-            if (employee == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(customer);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Age,DOB,Gender,Occupation,Email,PhoneNo")] Employee employee)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Age,DOB,Gender,Occupation,Email,PhoneNo")] Customer customer)
         {
             if (ModelState.IsValid)
             {
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(apiBaseAddress);
-                    var response = await client.PutAsJsonAsync("employees/edit", employee);
+                    var response = await client.PutAsJsonAsync("customers/edit", customer);
                     if (response.IsSuccessStatusCode)
                     {
                         return RedirectToAction("Index");
@@ -147,7 +146,7 @@ namespace MVCwithWebAPI.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(employee);
+            return View(customer);
         }
 
         public async Task<ActionResult> Delete(string id)
@@ -156,16 +155,16 @@ namespace MVCwithWebAPI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = null;
+            Customer customer = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiBaseAddress);
 
-                var result = await client.GetAsync($"employees/details/{id}");
+                var result = await client.GetAsync($"Customers/details/{id}");
 
                 if (result.IsSuccessStatusCode)
                 {
-                    employee = await result.Content.ReadAsAsync<Employee>();
+                    customer = await result.Content.ReadAsAsync<Customer>();
                 }
                 else
                 {
@@ -173,11 +172,11 @@ namespace MVCwithWebAPI.Controllers
                 }
             }
 
-            if (employee == null)
+            if (customer == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(customer);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -188,7 +187,7 @@ namespace MVCwithWebAPI.Controllers
             {
                 client.BaseAddress = new Uri(apiBaseAddress);
 
-                var response = await client.DeleteAsync($"employees/delete/{id}");
+                var response = await client.DeleteAsync($"Customers/delete/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index");
